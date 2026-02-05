@@ -4,28 +4,10 @@ load_dotenv()
 from openai import OpenAI
 client = OpenAI()
 
-file = client.files.create(
-    file=open("draconomicon.pdf", "rb"),
-    purpose="user_data"
-)
-
 response = client.responses.create(
     model="gpt-5",
-    input=[
-        {
-            "role": "user",
-            "content": [
-                {
-                    "type": "input_file",
-                    "file_id": file.id,
-                },
-                {
-                    "type": "input_text",
-                    "text": "What is the first dragon in the book?",
-                },
-            ]
-        }
-    ]
+    tools=[{"type": "web_search"}],
+    input="What was a positive news story from today?"
 )
 
 print(response.output_text)
