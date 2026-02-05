@@ -4,6 +4,11 @@ load_dotenv()
 from openai import OpenAI
 client = OpenAI()
 
+file = client.files.create(
+    file=open("draconomicon.pdf", "rb"),
+    purpose="user_data"
+)
+
 response = client.responses.create(
     model="gpt-5",
     input=[
@@ -11,15 +16,15 @@ response = client.responses.create(
             "role": "user",
             "content": [
                 {
-                    "type": "input_text",
-                    "text": "Analyze the letter and provide a summary of the key points.",
+                    "type": "input_file",
+                    "file_id": file.id,
                 },
                 {
-                    "type": "input_file",
-                    "file_url": "https://www.berkshirehathaway.com/letters/2024ltr.pdf",
+                    "type": "input_text",
+                    "text": "What is the first dragon in the book?",
                 },
-            ],
-        },
+            ]
+        }
     ]
 )
 
